@@ -17,4 +17,4 @@ RUN a2enmod auth_gssapi headers \
 
 EXPOSE 80
 
-CMD ["/bin/bash", "-c", "while [ ! -f /shared/apache-http.keytab ]; do echo 'Waiting for Apache keytab...'; sleep 1; done; cp /shared/apache-http.keytab /etc/apache2/apache-http.keytab; chmod 600 /etc/apache2/apache-http.keytab; apachectl -D FOREGROUND"]
+CMD ["/bin/bash", "-c", "set -e; while [ ! -s /shared/apache-http.keytab ]; do echo 'Waiting for non-empty Apache keytab...'; sleep 1; done; cp /shared/apache-http.keytab /etc/apache2/apache-http.keytab; chown www-data:www-data /etc/apache2/apache-http.keytab; chmod 600 /etc/apache2/apache-http.keytab; klist -kte /etc/apache2/apache-http.keytab; apachectl -D FOREGROUND"]
